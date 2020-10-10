@@ -19,23 +19,6 @@ Main      PROC  FAR
    	mov  ax, DATASG
    	mov  ds, ax
    
-	jmp f1
-f1_end:
-	mov ax,VARI1
-	pop VARI1
-	
-	jmp f2
-f2_end:
-	pop VARI2
-	
-	jmp f3
-f3_end:
-	pop VARRES
-	
-	mov  ah, 4ch		;завершаем программу
-	int  21h  
-   
-  
 f1: 
    mov ax,VARA          ;переменная a в ax
    mov si,VARB          ;переменная b в si
@@ -50,8 +33,9 @@ f1_2:					;если a<=b ,то считаем 3*(i+2)
 	mov ax,VARI			;ax = i
 	add ax,bx			;ax = ax + bx = i + 2*i = 3i
 	add ax,6			;ax +=6, ax = 3i+6
-	push ax				;ret ax
-	jmp 1_end
+	mov VARI1,ax
+	jmp f2
+	
 	
 f1_1:   				; если a>b, то считаем -(6*i-4) = -6*i + 4
 	shl bx, 1			;bx *= 2 , bx = 4*i
@@ -60,11 +44,8 @@ f1_1:   				; если a>b, то считаем -(6*i-4) = -6*i + 4
 	shl ax,1            ;ax = 2*i
 	sub ax,bx           ;ax = ax - bx = 2*i - 8*i = -6*i
 	add ax,4            ;ax = -6*i + 4
-	push ax				;ret ax
-	jmp f1_end
-	
-
-	
+	mov VARI1,ax
+		
 f2: 
    mov ax,VARA          ;переменная a в ax
    cmp	ax,VARB			;сравниваем переменные a и b соответственно
@@ -77,15 +58,14 @@ f2_2:					; если a<=b, то считаем 5 - 3*(i+1) = 2 - 3*i
 	mov bx,VARI         ;bx = i
 	sub bx,ax           ;bx = bx - ax = i - 4*i = -3*i
 	add bx,2            ;bx+=2
-	push bx				;ret bx
-	jmp f2_end
+	mov VARI2,bx
+	jmp f3
 
 f2_1:   				; если a>b, то считаем 2*(i+1)-4 = 2*i - 2
 	mov bx,VARI			;bx = i
 	shl bx,1			;bx *= 2
 	sub bx,2			;bx = bx - 2 = 2*i - 2
-	push bx				;ret bx
-	jmp f2_end
+	mov VARI2,bx
 	
 f3: 
    mov 	ax,VARI2		;кладем в ax i2			
@@ -98,12 +78,13 @@ f3_K_POS:
 	jl  f3_K_NEG
 	sub ax,3			;ax = ax-3 = |i2|-3
 	cmp 4,ax            ;сравниваем 4 с |i2|-3
-	jl  f3_ax            ;если 4 < |i2|-3
-	push 4
+	jl  f3_ax           ;если 4 < |i2|-3
+	mov VARRES,4
 	jmp f3_end
 
+
 f3_ax:
-	push ax
+	mov VARRES,ax
 	jmp f3_end
 
 f3_K_NEG:
@@ -113,7 +94,7 @@ f3_K_NEG:
 
 f3_K_NEG_COUNT:
 	sub bx,ax
-	push bx
+	mov VARRES,bx
 	jmp f3_end
 
 f3_I1_NEG:
@@ -123,6 +104,10 @@ f3_I1_NEG:
 f3_I2_NEG:
 	neg ax
 	jmp f3_K_POS
+
+f3_end:	
+	mov  ah, 4ch		;завершаем программу
+	int  21h  
 
 
  
