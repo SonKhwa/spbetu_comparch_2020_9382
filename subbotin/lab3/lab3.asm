@@ -51,7 +51,7 @@ f1_2:					;если a<=b ,то считаем 3*(i+2)
 	add ax,bx			;ax = ax + bx = i + 2*i = 3i
 	add ax,6			;ax +=6, ax = 3i+6
 	push ax				;ret ax
-	jmp f1_c
+	jmp 1_end
 	
 f1_1:   				; если a>b, то считаем -(6*i-4) = -6*i + 4
 	shl bx, 1			;bx *= 2 , bx = 4*i
@@ -61,11 +61,9 @@ f1_1:   				; если a>b, то считаем -(6*i-4) = -6*i + 4
 	sub ax,bx           ;ax = ax - bx = 2*i - 8*i = -6*i
 	add ax,4            ;ax = -6*i + 4
 	push ax				;ret ax
-	jmp f1_c
-	
-f1_c:
 	jmp f1_end
 	
+
 	
 f2: 
    mov ax,VARA          ;переменная a в ax
@@ -80,79 +78,53 @@ f2_2:					; если a<=b, то считаем 5 - 3*(i+1) = 2 - 3*i
 	sub bx,ax           ;bx = bx - ax = i - 4*i = -3*i
 	add bx,2            ;bx+=2
 	push bx				;ret bx
-	jmp f2_c
+	jmp f2_end
 
 f2_1:   				; если a>b, то считаем 2*(i+1)-4 = 2*i - 2
 	mov bx,VARI			;bx = i
 	shl bx,1			;bx *= 2
 	sub bx,2			;bx = bx - 2 = 2*i - 2
 	push bx				;ret bx
-	jmp f2_c
-
-f2_c:
 	jmp f2_end
 	
-
 f3: 
-   mov 	ax,VARK			;ax = *si	(k)
-   cmp	ax,0			;cmp k,0
-   jl	f3_1_1			;если k < 0
+   mov 	ax,VARI2		;кладем в ax i2			
+   cmp	ax,0			; сравниваем i2 с 0
+   jl	f3_I2_NEG		;если i2 < 0
 
-f3_2_1:					;если k>=0
-	mov ax,VARI2		;ax = i2
-	cmp ax,0 			;сравниваем i2 c 0
-	jl f3_2_c1          ;если i2 < 0
-
-f3_2_2:
-	sub ax,3            ;ax = |i2|-3
-	cmp ax,4            ;сравниваем |i2|-3 с 4
-	jg f3_1_c           ;если |i2|-3 > 4
-	mov ax,4			;если |i2|-3 <=4, то ax = 4
-	jmp f3_1_c          ;переключаемся на метку, в которой отправляем ax в стек
-
-
-
-
-f3_2_c1:                ;если i2 < 0
-	neg ax              ;меняем знак у i2
-	jmp f3_2_2
-
-
-
-
-f3_2_c:					;else
-	push VARI2			;ret i1
-	jmp f3_c		
-
-f3_1_1:   				;если k < 0, то считаем |i1|-|i2|
-	mov ax,VARI1		;в ax переменная i1
-	cmp ax,0			;проверяем ax положительна ли
-	jl f3_1_c1			;если отрицательна, то умножаем на -1
-
-f3_1_2:					;продолжаем, в ax лежит |i1| теперь делаем то же с bx
-	mov bx,VARI2        ;в bx переменная i2
-	cmp bx,0            ;сравниваем bx с 0
-	jl f3_1_c2          ;если bx отрицательна
-
-f3_1:
-	sub ax,bx			;ax = ax-bx = |i1|-|i2|
-	jmp f3_1_c
-
-f3_1_c1:                ;если ax(i1) отрицательна
-	neg ax              ;меняем знак у i1
-	jmp f3_1_2
-
-f3_1_c2: 				;если bx(i2) отрицательна
-	neg bx              ;меняем знак у i2
-	jmp f3_1
-
-
-f3_1_c:								
-	push ax				;записываем в стек ax
-	jmp f3_c
-		
-f3_c:
+f3_K_POS:
+	mov bx,VARK         ;кладем в bx k
+	cmp bx, 0           ;сравниваем k с 0
+	jl  f3_K_NEG
+	sub ax,3			;ax = ax-3 = |i2|-3
+	cmp 4,ax            ;сравниваем 4 с |i2|-3
+	jl  f3_ax            ;если 4 < |i2|-3
+	push 4
 	jmp f3_end
+
+f3_ax:
+	push ax
+	jmp f3_end
+
+f3_K_NEG:
+	mov bx, VARI1       ;кладем в bx i1
+	cmp bx, 0           ;сравниваем i1 c 0
+	jl f3_I1_NEG        ;если i1<0
+
+f3_K_NEG_COUNT:
+	sub bx,ax
+	push bx
+	jmp f3_end
+
+f3_I1_NEG:
+	neg bx
+	jmp f3_K_NEG_COUNT
+
+f3_I2_NEG:
+	neg ax
+	jmp f3_K_POS
+
+
  
 Main      ENDP
 CODE      ENDS
