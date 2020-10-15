@@ -9,7 +9,7 @@ git remote add Crunchy0                  https://github.com/Crunchy0/spbetu_comp
 git remote add alexundertable            https://github.com/alexundertable/spbetu_comparch_2020_9382.git     # Кодуков
 git remote add Homry                     https://github.com/Homry/spbetu_comparch_2020_9382.git              # Сорокумов
 git remote add Indiora                   https://github.com/Indiora/spbetu_comparch_2020_9382.git            # Савельев
-#git remote add                           https://github.com//spbetu_comparch_2020_9382.git                  # 
+git remote add TestGeorgeH               https://github.com/TestGeorgeH/spbetu_comparch_2020_9382.git        # Герасев
 #git remote add                           https://github.com//spbetu_comparch_2020_9382.git                  # 
 #git remote add                           https://github.com//spbetu_comparch_2020_9382.git                  # 
 #git remote add                           https://github.com//spbetu_comparch_2020_9382.git                  # 

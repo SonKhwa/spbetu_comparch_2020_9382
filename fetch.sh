@@ -9,7 +9,7 @@ git fetch Crunchy0        # Павлов
 git fetch alexundertable  # Кодуков
 git fetch Homry           # Сорокумов
 git fetch Indiora         # Савельев
-#git fetch                # 
+git fetch TestGeorgeH     # Герасев
 #git fetch                # 
 #git fetch                # 
 #git fetch                # 
