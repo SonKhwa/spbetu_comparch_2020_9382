@@ -3,10 +3,10 @@ AStack SEGMENT STACK
 AStack ENDS
 ; Данные программы
 DATA SEGMENT
-a  DW 4
-b  DW 5
-i  DW 3
-k  DW 2 
+a  DW -5
+b  DW -4
+i  DW -3
+k  DW -1 
 i1  DW 0
 i2 DW 0
 res DW 0
@@ -26,8 +26,8 @@ Main PROC FAR
  cmp CX, DX
  jg fst_case
  mov AX, DS:i
- shl AX, 1
- shl AX, 1
+ sal AX, 1
+ sal AX, 1
  add AX, DS:i
  add AX, DS:i
  mov CX, 8
@@ -60,8 +60,8 @@ Main PROC FAR
 
  fst_case:
      mov AX, DS:i
-     shl AX, 1
-     shl AX, 1
+     sal AX, 1
+     sal AX, 1
      mov CX, 7
      sub CX, AX
      mov DS:i1, CX
