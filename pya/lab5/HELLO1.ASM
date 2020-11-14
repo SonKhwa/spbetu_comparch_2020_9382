@@ -10,14 +10,38 @@ DATA ENDS
 CODE      SEGMENT
           ASSUME CS:CODE, DS:DATA, SS:AStack
 
-          Output PROC FAR
-    push ax
+          Output PROC FAR jmp ss ax ss<-code offset
+          jmp start
+
+ST_SS DW 0000
+ST_AX DW 0000
+ST_SP DW 0000
+IStack DW 30 DUP(?)
+
+   start:
+
+   mov ST_SP, SP
+   mov ST_AX, AX
+   mov AX, SS
+   mov ST_SS, AX
+   mov AX, IStack
+   mov SS, AX
+   mov AX, ST_AX
+
+   push ax
     push dx
     mov  ah, 09h
     mov dx, offset message
     int  21h
     pop dx
     pop ax
+
+    mov ST_AX,AX
+	mov AX,ST_SS
+	mov SS,AX
+	mov SP,ST_SP
+	mov AX,ST_AX
+
     mov al,20h
     out 20h,al
      iret
