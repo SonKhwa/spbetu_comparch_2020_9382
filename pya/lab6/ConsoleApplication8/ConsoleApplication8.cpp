@@ -32,7 +32,8 @@ int main()
     }
     int* LGrInt = new int[NInt]();
     std::cout << "Enter " << NInt - 1 << " lower bounds of intervals:\n";
-    for (int i = 0; i < NInt - 1; i++) {
+    LGrInt[0] = Xmin;
+    for (int i = 1; i < NInt; i++) {
         std::cin >> LGrInt[i];
         while (LGrInt[i] < LGrInt[i - 1]) {
             std::cout << "Entered bound " << LGrInt[i] << " are lower than previous! Enter again\n";
@@ -43,7 +44,7 @@ int main()
             std::cin >> LGrInt[i];
         }
     }
-    LGrInt[NInt - 1] = Xmax;
+//    LGrInt[NInt - 1] = Xmax;
     int* arr = new int[NumRanDat]();
     for (int i = 0; i < NumRanDat; i++) {
         arr[i] = Xmin + rand() % (Xmax - Xmin + 1);
@@ -64,7 +65,7 @@ int main()
     std::cout << "\nn_of_interval\tl_brs\tcnt_of_p-rm_n\n";
     file << "\nn_of_interval\tleft_brs\tcnt_of_p-rm_n\n";
     for (int i = 0; i < NInt; i++) {
-        int res = i != 0 ? LGrInt[i - 1] : Xmin;
+        int res = i != 0 ? LGrInt[i] : Xmin;
         file << "     " << i + 1 << "\t\t    " << res << "\t\t   " << res_arr[i] << "\n";
         std::cout << "     " << i + 1 << "\t\t    " << res << "\t\t   " << res_arr[i] << "\n";
     }
