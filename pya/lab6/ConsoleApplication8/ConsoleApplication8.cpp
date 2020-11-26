@@ -44,7 +44,7 @@ int main()
             std::cin >> LGrInt[i];
         }
     }
-//    LGrInt[NInt - 1] = Xmax;
+    LGrInt[NInt - 1] = Xmax;
     int* arr = new int[NumRanDat]();
     for (int i = 0; i < NumRanDat; i++) {
         arr[i] = Xmin + rand() % (Xmax - Xmin + 1);
