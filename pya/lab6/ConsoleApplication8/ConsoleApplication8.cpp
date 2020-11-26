@@ -46,7 +46,7 @@ int main()
     LGrInt[NInt - 1] = Xmax;
     int* arr = new int[NumRanDat]();
     for (int i = 0; i < NumRanDat; i++) {
-        arr[i] = Xmin + rand() % (Xmax - Xmin);
+        arr[i] = Xmin + rand() % (Xmax - Xmin + 1);
     }
     int* res_arr = new int[NInt];
     for (int i = 0; i < NInt; i++)
