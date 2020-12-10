@@ -4,9 +4,12 @@ STACKSG	ENDS
 
 DATASG  SEGMENT  PARA 'Data'; SEG DATA
 	KEEP_CS DW 0 ;
-        MESSAGE1 DB 'Transformation to string: $'
-        MESSAGE2 DB 'Transformation from string to digit and back: $'
+		MESSAGE0 DB 'Enter data $'
+        MESSAGE1 DB 'What action do you like to use (1/2)$'
+		MESSAGE2 DB 'Transformation to string: $'
+        MESSAGE3 DB 'Transformation from string to digit and back: $'
 	STRING DB 35 DUP('0')
+	buffer DB 20 DUP('0')
 DATASG	ENDS; ENDS DATA
 
 
@@ -141,16 +144,54 @@ HEX_TO_DEC ENDP
 
 Main PROC FAR
    	mov  ax, DATASG                     
-   	mov  ds, ax   
+   	mov  ds, ax  
 	
-        mov DX, offset MESSAGE1
-        mov ah,09h;
+	mov DX, offset MESSAGE0
+    mov ah,09h;
 	int 21h;
-	mov AX, 08001h
+
+	xor di, di
+vvod:
+	mov ah, 01h
+	int 21h
+	cmp al, 13
+	je stop
+	mov STRING[di], al
+	inc di
+	loop vvod
+	stop:
+	mov STRING[di], '$'
+	mov dl, 10
+	mov ah, 02h
+	int 21h
+
+    mov DX, offset MESSAGE1
+    mov ah,09h;
+	int 21h;
+
+	mov ah, 01h
+	int 21h
+	cmp al, '1'
+	jne case_snd
+
+case_fst:
+	mov dl, 10
+	mov ah, 02h
+	int 21h
+	mov dl, 13
+	mov ah, 02h
+	int 21h
+	mov DX, offset MESSAGE2
+    mov ah,09h;
+	int 21h;
+	mov AX, 0
+	call HEX_TO_DEC
 	call DEC_TO_HEX
 	mov ah,09h;
 	int 21h;
-	
+	jmp my_end
+
+case_snd:
 	mov dl, 10
 	mov ah, 02h
 	int 21h
@@ -158,16 +199,16 @@ Main PROC FAR
 	mov ah, 02h
 	int 21h
 
-        mov DX, offset MESSAGE2
-        mov ah,09h;
+    mov DX, offset MESSAGE3
+    mov ah,09h;
 	int 21h;
 	mov ax, 0
 	call HEX_TO_DEC
 	call DEC_TO_HEX
-
 	mov ah,09h
 	int 21h
 
+my_end:
 	mov ah,4Ch;
 	int 21h;
 	
